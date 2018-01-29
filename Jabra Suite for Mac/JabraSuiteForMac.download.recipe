@@ -32,6 +32,11 @@
         <dict>
             <key>Processor</key>
             <string>URLDownloader</string>
+			<key>Arguments</key>
+			    <dict>
+			        <key>filename</key>
+			        <string>Jabra Suite for Mac_%version%.dmg</string>
+			</dict>
         </dict>
         <dict>
             <key>Processor</key>
