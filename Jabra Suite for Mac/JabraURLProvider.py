@@ -27,8 +27,6 @@ from autopkglib import Processor, ProcessorError
 
 __all__ = ["JabraURLProvider"]
 
-URLS = {"jabra": "https://www.jabra.com/macsuite/JMSVersionUpdate.xml"}
-
 import ssl
 from functools import wraps
 def sslwrap(func):
