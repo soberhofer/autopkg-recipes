@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
-# Copyright 2013 Timothy Sutton
+# Copyright 2018 soberhofer
+# Based on the BareBonesURLProvider by Tim Sutton (https://github.com/autopkg/recipes/blob/master/Barebones/BarebonesURLProvider.py)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,42 +14,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""See docstring for BarebonesURLProvider class"""
 # suppress 'missing class member env'
 #pylint: disable=e1101
 
 import urllib2
-import plistlib
-from distutils.version import LooseVersion
-from operator import itemgetter
 import xml.etree.ElementTree as ET
 
 from autopkglib import Processor, ProcessorError
 
 __all__ = ["JabraURLProvider"]
 
-import ssl
-from functools import wraps
-def sslwrap(func):
-    """http://stackoverflow.com/a/24175862"""
-    @wraps(func)
-    def wraps_sslwrap(*args, **kw):
-        """Monkey-patch for sslwrap to force TLSv1"""
-        kw['ssl_version'] = ssl.PROTOCOL_TLSv1
-        return func(*args, **kw)
-    return wraps_sslwrap
-
-ssl.wrap_socket = sslwrap(ssl.wrap_socket)
-
 class JabraURLProvider(Processor):
-    """Provides a version and dmg download for the Barebones product given."""
+    """Provides a version and dmg download for Jabra Suite for Mac."""
     description = __doc__
     input_variables = {
-        "product_name": {
-            "required": True,
-            "description":
-                "Product to fetch URL for. One of 'textwrangler', 'bbedit'.",
-        },
     }
     output_variables = {
         "version": {
@@ -60,24 +39,9 @@ class JabraURLProvider(Processor):
     }
 
     def main(self):
-        '''Find the download URL'''
-        def compare_version(this, that):
-            '''compare LooseVersions'''
-            return cmp(LooseVersion(this), LooseVersion(that))
-            
-        prod = "jabra"
-        url = "https://www.jabra.com/macsuite/JMSVersionUpdate.xml"
         try:
-            manifest_str = urllib2.urlopen(url).read()
-        except BaseException as err:
-            raise ProcessorError(
-                "Unexpected error retrieving product manifest: '%s'" % err)
-
-        try:
-            tree = ET.ElementTree(file=urllib2.urlopen(url))
+            tree = ET.ElementTree(file=urllib2.urlopen("https://www.jabra.com/macsuite/JMSVersionUpdate.xml"))
             root = tree.getroot()
-            root.tag, root.attrib
-            
             version = root[1].text
             url = root[4].text
         except BaseException as err:

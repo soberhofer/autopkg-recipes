@@ -13,8 +13,6 @@
     <dict>
         <key>NAME</key>
         <string>Jabra Suite for Mac</string>
-        <key>SPARKLE_FEED_URL</key>
-        <string>https://www.jabra.com/macsuite/JMSVersionUpdate.xml</string>
     </dict>
     <key>MinimumVersion</key>
     <string>0.4.0</string>
@@ -23,11 +21,6 @@
         <dict>
             <key>Processor</key>
             <string>JabraURLProvider</string>
-            <key>Arguments</key>
-            <dict>
-                <key>product_name</key>
-                <string>jabra</string>
-            </dict>
         </dict>
         <dict>
             <key>Processor</key>
